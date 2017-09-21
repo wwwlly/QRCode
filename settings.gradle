@@ -1,0 +1,1 @@
+include ':app', ':AndroidZxing', ':zxingcore', ':qrcodesample'
