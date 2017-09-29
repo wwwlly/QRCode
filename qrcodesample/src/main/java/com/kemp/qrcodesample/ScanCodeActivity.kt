@@ -1,5 +1,6 @@
 package com.kemp.qrcodesample
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.SurfaceView
@@ -20,7 +21,13 @@ class ScanCodeActivity : CaptureActivity() {
     }
 
     override fun handleDecodeText(result: String?) {
-        Log.d("ScanCodeActivity", result)
-        finish()
+        val intent = Intent(this, ResultActivity::class.java)
+        intent.putExtra("result", result)
+        startActivity(intent)
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+//        restartPreview()
     }
 }
