@@ -41,6 +41,8 @@ import android.view.SurfaceView;
  *
  * 由于{@link Camera.PreviewCallback#onPreviewFrame}与设置camera orientation无关，因此byte[] data是横屏的数据
  * 需要处理成竖屏的
+ *
+ * 参考：https://github.com/LibraZhu/Component
  */
 public abstract class CaptureActivity extends Activity implements CaptureUnitCallback {
 
