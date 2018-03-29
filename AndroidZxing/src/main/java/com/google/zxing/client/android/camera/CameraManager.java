@@ -29,6 +29,7 @@ import com.google.zxing.client.android.camera.open.OpenCamera;
 import com.google.zxing.client.android.camera.open.OpenCameraInterface;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * This object wraps the Camera service object and expects to be the only one talking to it. The
@@ -265,11 +266,12 @@ public final class CameraManager {
                 // Called early, before init even finished
                 return null;
             }
-            rect.left = rect.left * cameraResolution.x / screenResolution.x;
-            rect.right = rect.right * cameraResolution.x / screenResolution.x;
-            rect.top = rect.top * cameraResolution.y / screenResolution.y;
-            rect.bottom = rect.bottom * cameraResolution.y / screenResolution.y;
+            rect.left = rect.left * cameraResolution.y / screenResolution.x;
+            rect.right = rect.right * cameraResolution.y / screenResolution.x;
+            rect.top = rect.top * cameraResolution.x / screenResolution.y;
+            rect.bottom = rect.bottom * cameraResolution.x / screenResolution.y;
             framingRectInPreview = rect;
+            Log.d(TAG, "FramingRectInPreview rect: " + framingRectInPreview);
         }
         return framingRectInPreview;
     }
@@ -312,6 +314,8 @@ public final class CameraManager {
         }
     }
 
+    private byte[] mRotatedData;
+
     /**
      * A factory method to build the appropriate LuminanceSource object based on the format
      * of the preview buffers, as described by Camera.Parameters.
@@ -322,12 +326,32 @@ public final class CameraManager {
      * @return A PlanarYUVLuminanceSource instance.
      */
     public PlanarYUVLuminanceSource buildLuminanceSource(byte[] data, int width, int height) {
+        if (null == mRotatedData) {
+            mRotatedData = new byte[width * height];
+        } else {
+            if (mRotatedData.length < width * height) {
+                mRotatedData = new byte[width * height];
+            }
+        }
+        Arrays.fill(mRotatedData, (byte) 0);
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (x + y * width >= data.length) {
+                    break;
+                }
+                mRotatedData[x * height + height - y - 1] = data[x + y * width];
+            }
+        }
+        int tmp = width; // Here we are swapping, that's the difference to #11
+        width = height;
+        height = tmp;
         Rect rect = getFramingRectInPreview();
         if (rect == null) {
             return null;
         }
+        Log.d(TAG,"width:" + width + ",height:" + height);
         // Go ahead and assume it's YUV rather than die.
-        return new PlanarYUVLuminanceSource(data, width, height, rect.left, rect.top,
+        return new PlanarYUVLuminanceSource(mRotatedData, width, height, rect.left, rect.top,
                 rect.width(), rect.height(), false);
     }
 

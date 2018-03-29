@@ -307,7 +307,7 @@ public final class CameraConfigurationUtils {
             boolean isCandidatePortrait = realWidth < realHeight && ConfigUnit.getInstance().getScreenOrientation() == Constants.SCREEN_ORIENTATION_PORTRAITE;
             int maybeFlippedWidth = isCandidatePortrait ? realWidth : realHeight;
             int maybeFlippedHeight = isCandidatePortrait ? realHeight : realWidth;
-            Log.i(TAG, "www: " + realWidth + " " + realHeight + " " + isCandidatePortrait + " " + maybeFlippedWidth + " " + maybeFlippedHeight);
+            Log.i(TAG, realWidth + " " + realHeight + " " + isCandidatePortrait + " " + maybeFlippedWidth + " " + maybeFlippedHeight);
 
             if (maybeFlippedWidth == screenResolution.x && maybeFlippedHeight == screenResolution.y) {
                 Point exactPoint = new Point(realWidth, realHeight);

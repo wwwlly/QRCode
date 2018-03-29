@@ -17,6 +17,8 @@
 package com.google.zxing.client.android;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.KeyEvent;
@@ -25,6 +27,20 @@ import android.view.SurfaceView;
 /**
  * 子类必须调用setMainView这个方法来设置surfaceView和viewfinderView
  * 调用setOrientationPortrait来设置横屏还是竖屏
+ *
+ * 二维码横屏转成竖屏注意事项：
+ * 两方面camera配置和二维码配置
+ *
+ * acitivity竖屏配置
+ *
+ * camera竖屏配置{@link android.hardware.Camera#setDisplayOrientation(int)}
+ * <p>This does not affect the order of byte array passed in {@link Camera.PreviewCallback#onPreviewFrame},
+ * JPEG pictures, or recorded videos. This method is not allowed to be called during preview.
+ *
+ * camera设置预览大小{@link android.hardware.Camera.Parameters#setPreviewSize(int, int)}
+ *
+ * 由于{@link Camera.PreviewCallback#onPreviewFrame}与设置camera orientation无关，因此byte[] data是横屏的数据
+ * 需要处理成竖屏的
  */
 public abstract class CaptureActivity extends Activity implements CaptureUnitCallback {
 
@@ -81,6 +97,11 @@ public abstract class CaptureActivity extends Activity implements CaptureUnitCal
     @Override
     public void handleDecodeText(String result) {
         finish();
+    }
+
+    @Override
+    public void handleDecodeBitmap(Bitmap result) {
+
     }
 
     @Override

@@ -210,12 +210,13 @@ public class CaptureUnit implements SurfaceHolder.Callback, ActivityFragmentLife
 
         boolean fromLiveScan = barcode != null;
         if (fromLiveScan) {
-            // Then not from history, so beep/vibrate and we have an image to draw on
-            beepManager.playBeepSoundAndVibrate();
-            ParsedResult parsedResult = ResultParser.parseResult(rawResult);
-            String result = parsedResult.getDisplayResult();
-            Log.d(TAG, "result:" + result);
-            if (captureUnitCallback != null) captureUnitCallback.handleDecodeText(result);
+            if (captureUnitCallback != null) captureUnitCallback.handleDecodeBitmap(barcode);
+//            // Then not from history, so beep/vibrate and we have an image to draw on
+//            beepManager.playBeepSoundAndVibrate();
+//            ParsedResult parsedResult = ResultParser.parseResult(rawResult);
+//            String result = parsedResult.getDisplayResult();
+//            Log.d(TAG, "result:" + result);
+//            if (captureUnitCallback != null) captureUnitCallback.handleDecodeText(result);
 
         } else {
             if (captureUnitCallback != null) captureUnitCallback.handleDecodeText(null);
