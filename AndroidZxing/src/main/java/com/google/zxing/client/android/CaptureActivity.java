@@ -38,6 +38,9 @@ import android.view.SurfaceView;
  * JPEG pictures, or recorded videos. This method is not allowed to be called during preview.
  *
  * camera设置预览大小{@link android.hardware.Camera.Parameters#setPreviewSize(int, int)}
+ * the preview size is the size before it is rotated by display orientation.
+ * 先调用{@link android.hardware.Camera.Parameters#setPreviewSize(int, int)}横屏时的，
+ * 再调用{@link android.hardware.Camera#setDisplayOrientation(int)}90度
  *
  * 由于{@link Camera.PreviewCallback#onPreviewFrame}与设置camera orientation无关，因此byte[] data是横屏的数据
  * 需要处理成竖屏的
