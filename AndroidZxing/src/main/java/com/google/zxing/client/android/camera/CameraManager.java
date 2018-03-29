@@ -349,7 +349,6 @@ public final class CameraManager {
         if (rect == null) {
             return null;
         }
-        Log.d(TAG,"width:" + width + ",height:" + height);
         // Go ahead and assume it's YUV rather than die.
         return new PlanarYUVLuminanceSource(mRotatedData, width, height, rect.left, rect.top,
                 rect.width(), rect.height(), false);
